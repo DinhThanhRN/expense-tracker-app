@@ -1,0 +1,46 @@
+[
+  {
+    "_id": "1",
+    "name": "Bucky Banner",
+    "email": "buckbanner@gmail.com",
+    "avatar": "buckbanner.jpg",
+    "role": "admin"
+  },
+  {
+    "_id": "2",
+    "name": "Hulk",
+    "email": "hulj@gmail.com",
+    "avatar": "hulk.jpg",
+    "role": "user"
+  },
+  {
+    "_id": "3",
+    "name": "Hawkeye",
+    "email": "hawkeye@gmail.com",
+    "avatar": "hawkeye.jpg",
+    "role": "user"
+  },
+  {
+    "_id": "4",
+    "name": "Scalett Witch",
+    "email": "scalettwitch@gmail.com",
+    "avatar": "scalettwitch.jpg",
+    "role": "admin"
+  },
+  {
+    "id": "5",
+    "name": "Peter Paker",
+    "birthday": "27/03/2003",
+    "email": "peter@gmail.com",
+    "avatar": "peter.jpg",
+    "role": "user"
+  },
+  {
+    "id": "6",
+    "name": "Peter Paker",
+    "birthday": "27/03/2003",
+    "email": "peter@gmail.com",
+    "avatar": "peter.jpg",
+    "role": "user"
+  }
+]
