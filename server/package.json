@@ -4,7 +4,7 @@
   "description": "A dummy server",
   "main": "app.js",
   "scripts": {
-    "start:dev": "nodemon server.js",
+    "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "Trinh Dinh Thanh",
@@ -12,6 +12,13 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "morgan": "^1.10.0"
+    "mongodb": "^5.4.0",
+    "mongoose": "^5.13.17",
+    "morgan": "^1.10.0",
+    "slugify": "^1.6.6",
+    "validator": "^13.9.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

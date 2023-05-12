@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const userRouter = require('./routes/userRouter');
 const expenseRouter = require('./routes/expenseRouter');
 const categoryRouter = require('./routes/categoryRouter');
+const testRouter = require('./routes/testRouter');
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.use((request, response, next) => {
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/expenses', expenseRouter);
 app.use('/api/v1/categories', categoryRouter);
+app.use('/api/v1/test', testRouter);
+// app.use('/api/v1/expenses/:name');
 // SERVER
 
 module.exports = app;

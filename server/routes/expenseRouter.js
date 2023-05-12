@@ -1,23 +1,18 @@
 const express = require('express');
-const {
-  getAllExpenses,
-  createExpense,
-  getExpense,
-  updateExpense,
-  deleteExpense,
-  checkID,
-  checkBody,
-} = require('../controllers/expense');
+const expenseController = require('../controllers/expenseController');
 
 const router = express.Router();
 
-router.param('id', checkID);
+// router.param('id', checkID);
 
-router.route('/').get(getAllExpenses).post(checkBody, createExpense);
+router
+  .route('/')
+  .get(expenseController.getAllExpenses)
+  .post(expenseController.checkBody, expenseController.createExpense);
 router
   .route('/:id')
-  .get(getExpense)
-  .patch(checkBody, updateExpense)
-  .delete(deleteExpense);
+  .get(expenseController.getExpense)
+  .patch(expenseController.checkBody, expenseController.updateExpense)
+  .delete(expenseController.deleteExpense);
 
 module.exports = router;
