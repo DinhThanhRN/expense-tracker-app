@@ -7,17 +7,25 @@ const expenseScheme = new mongoose.Schema({
   },
   paidFor: {
     type: String,
-    require: true,
+    required: [true, 'An expense must have the purpose of paying'],
+  },
+  price: {
+    type: Number,
+    required: [true, 'Must have price'],
   },
   category: {
     type: String,
-    require: true,
+    required: [true, 'An expense must have category'],
   },
   paidAt: {
     type: Date,
-    require: true,
+    required: [true, 'An expense must have the time that is paid'],
   },
 });
+
+// expenseScheme.post(/^find/, function (next) {
+//   next();
+// });
 
 const Expense = mongoose.model('Expense', expenseScheme);
 

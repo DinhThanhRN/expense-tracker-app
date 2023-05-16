@@ -1,5 +1,6 @@
 const express = require('express');
 const expenseController = require('../controllers/expenseController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -7,12 +8,12 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(expenseController.getAllExpenses)
-  .post(expenseController.checkBody, expenseController.createExpense);
+  .get(authController.protect, expenseController.getAllExpenses)
+  .post(authController.protect, expenseController.createExpense);
 router
   .route('/:id')
-  .get(expenseController.getExpense)
-  .patch(expenseController.checkBody, expenseController.updateExpense)
-  .delete(expenseController.deleteExpense);
+  .get(authController.protect, expenseController.getExpense)
+  .patch(authController.protect, expenseController.updateExpense)
+  .delete(authController.protect, expenseController.deleteExpense);
 
 module.exports = router;

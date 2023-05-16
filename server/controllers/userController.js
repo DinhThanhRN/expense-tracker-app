@@ -1,108 +1,104 @@
-const fs = require('fs');
-
 const User = require('../models/userModel');
 
-const users = JSON.parse(fs.readFileSync(`${__dirname}/../data/users.json`));
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/AppError');
 
-// const checkID = (req, res, next, val) => {
-//   console.log(`User id is ${req.params.id}`);
-//   if (+req.params.id > users.length)
-//     return res.status(404).json({
-//       status: 'fail',
-//       message: 'Invalid ID',
-//     });
-//   next();
-// };
-
-exports.checkBody = (req, res, next) => {
-  if (!req.body.email || !req.body.name)
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing email, name or role!',
-    });
-  next();
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
 };
 
-exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
+exports.getAllUsers = catchAsync(async (req, res) => {
+  const users = await User.find();
 
-    res.status(200).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      length: users.length,
-      data: {user: users},
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
-exports.getUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    requestedTime: req.requestTime,
+    length: users.length,
+    data: {user: users},
+  });
+});
 
-    res.status(200).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      data: {user},
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
-exports.createUser = async (req, res) => {
-  try {
-    const newUser = await User.create(req.body);
+exports.updateMe = catchAsync(async (req, res, next) => {
+  // 1) Create error if user POSTs password data
+  if (req.body.password || req.body.passwordConfirm)
+    return next(
+      new AppError(
+        'This route is not for password update, please use updateMyPassword',
+        400,
+      ),
+    );
 
-    res.status(201).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      data: {user: newUser},
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'Invalid data sent',
-    });
-  }
-};
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
-exports.deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
+  // 2) Filtered out unwanted fields names that are not allow to be updated.
+  const filteredBody = filterObj(req.body, 'name', 'email');
 
-    res.status(200).json({
-      status: 'success',
-      data: null,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
+  // 2) Update user document
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    runValidators: true,
+    new: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedUser,
+    },
+  });
+});
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, {active: false});
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return next(new AppError('No user found that ID', 404));
+
+  res.status(200).json({
+    status: 'success',
+    requestedTime: req.requestTime,
+    data: {user},
+  });
+});
+exports.createUser = catchAsync(async (req, res) => {
+  const newUser = await User.create(req.body);
+
+  res.status(201).json({
+    status: 'success',
+    requestedTime: req.requestTime,
+    data: {user: newUser},
+  });
+});
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    runValidators: true,
+    new: true,
+  });
+  if (!user) return next(new AppError('No user found that ID', 404));
+
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    data: {
+      user,
+    },
+  });
+});
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return next(new AppError('No user found that ID', 404));
+
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    data: null,
+  });
+});
