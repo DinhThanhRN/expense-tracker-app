@@ -7,7 +7,7 @@ const router = express.Router();
 // router.param('id', checkID);
 
 router
-  .route('/')
+  .route('/:userID')
   .get(authController.protect, expenseController.getAllExpenses)
   .post(authController.protect, expenseController.createExpense);
 router

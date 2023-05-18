@@ -3,7 +3,8 @@ const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllExpenses = catchAsync(async (req, res) => {
-  const features = new APIFeatures(Expense.find(), req.query)
+  const userID = req.params.userID;
+  const features = new APIFeatures(Expense.find({userID}), req.query)
     .filter()
     .sort()
     .limitFields();
@@ -16,6 +17,7 @@ exports.getAllExpenses = catchAsync(async (req, res) => {
     data: {expense: expenses},
   });
 });
+
 exports.getExpense = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const expense = await Expense.findById(id);
@@ -27,8 +29,11 @@ exports.getExpense = catchAsync(async (req, res, next) => {
     data: {expense},
   });
 });
+
 exports.createExpense = catchAsync(async (req, res) => {
-  const newExpense = await Expense.create(req.body);
+  const userID = req.params.userID;
+
+  const newExpense = await Expense.create({userID, ...req.body});
 
   res.status(200).json({
     status: 'success',
@@ -36,6 +41,7 @@ exports.createExpense = catchAsync(async (req, res) => {
     data: {expense: newExpense},
   });
 });
+
 exports.updateExpense = catchAsync(async (req, res, next) => {
   const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,
@@ -51,6 +57,7 @@ exports.updateExpense = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.deleteExpense = catchAsync(async (req, res, next) => {
   const expense = await Expense.findByIdAndDelete(req.params.id);
   if (!expense) return next(new AppError('No expense found that ID', 404));

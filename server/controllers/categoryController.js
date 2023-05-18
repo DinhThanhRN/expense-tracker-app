@@ -1,4 +1,5 @@
 const Category = require('../models/categoryModel');
+const User = require('../models/userModel');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -29,6 +30,30 @@ exports.createCategory = catchAsync(async (req, res) => {
     data: {category: newCategory},
   });
 });
+
+// exports.createOwnCategory = catchAsync(async (req, res, next) => {
+//   const id = req.params.userID;
+//   const category = await Category.find({name: req.body.name});
+//   const data = {...req.body};
+
+//   let newCategory;
+//   if (category) {
+//     newCategory = await Category.create({
+//       ...data,
+//       createdBy: [...category.createdBy, id],
+//     });
+//   } else {
+//     newCategory = await Category.create({...data, createdBy: [id]});
+//   }
+
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       category: newCategory,
+//     },
+//   });
+// });
+
 exports.updateCategory = catchAsync(async (req, res, next) => {
   const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,

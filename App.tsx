@@ -6,7 +6,7 @@ import axios from 'axios';
 const App = (): JSX.Element => {
   useEffect(() => {
     axios
-      .get('localhost:3000/api/v1/users')
+      .get('http://localhost:8000/api/v1/users')
       .then(response => {
         console.log(response);
       })

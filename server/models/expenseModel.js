@@ -1,9 +1,9 @@
-const {ObjectID, ObjectId} = require('mongodb');
 const mongoose = require('mongoose');
 
 const expenseScheme = new mongoose.Schema({
   userID: {
     type: String,
+    select: false,
   },
   paidFor: {
     type: String,
@@ -19,7 +19,7 @@ const expenseScheme = new mongoose.Schema({
   },
   paidAt: {
     type: Date,
-    required: [true, 'An expense must have the time that is paid'],
+    default: Date.now(),
   },
 });
 

@@ -9,6 +9,11 @@ const categoryScheme = new mongoose.Schema({
   icon: {
     type: String,
     require: [true, 'Category must have '],
+    default: 'grid-large',
+  },
+  createdBy: {
+    type: [String],
+    default: [],
   },
 });
 
