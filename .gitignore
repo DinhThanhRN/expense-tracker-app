@@ -1,3 +1,5 @@
+src/utils/backend_url.tsx
+src/InitComponent.tsx
 # OSX
 #
 .DS_Store

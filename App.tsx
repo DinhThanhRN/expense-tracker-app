@@ -1,24 +1,25 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+
 import {Colors} from './src/configs/colors';
-import axios from 'axios';
+import LoginScreen from './src/screens/auth/LoginScreen';
+import SignupScreen from './src/screens/auth/SignupSceen';
+
+const Stack = createStackNavigator();
 
 const App = (): JSX.Element => {
-  useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/v1/users')
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
   return (
-    <View style={styles.container}>
-      <Text>Hello Thanh ga</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="SignupScreen" component={SignupScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
