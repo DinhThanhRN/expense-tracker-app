@@ -9,7 +9,11 @@ export const login = async (credential: Credential) => {
     `${BACKEND_URL}/users/login`,
     credential,
   );
-  return {data: response.data.user, token: response.token};
+  return {
+    data: response.data.user,
+    token: response.token,
+    id: response.data.user._id,
+  };
 };
 
 export const signup = async (registration: Registration) => {

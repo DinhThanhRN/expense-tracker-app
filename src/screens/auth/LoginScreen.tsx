@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Sizes} from '../../configs/sizes';
 import {Colors} from '../../configs/colors';
@@ -19,6 +20,11 @@ import {NavigationProps} from '../../types/NavigationProps';
 import {createPlainAlert} from '../../components/error/createPlainAlert';
 import {login} from '../../services/auth';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import {storeAuthData} from '../../utils/functions/authInLocal';
+import {setUser} from '../../reducers/user';
+import {AppDispatch, RootState} from '../../reducers/store';
+import HomeScreen from '../main/HomeScreen';
+import MaiScreen from '../main/MainScreen';
 
 type CheckingActionType = 'EMAIL' | 'PASSWORD';
 
@@ -32,6 +38,8 @@ type CredentialCheckingAction = {
 
 const LoginScreen = (): JSX.Element => {
   const navigation = useNavigation<NavigationProps>();
+  const {user} = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [inputs, setInputs] = useState<any>({email: '', password: ''});
   const [checked, setChecked] = useState(false);
@@ -71,6 +79,7 @@ const LoginScreen = (): JSX.Element => {
   );
 
   const handleLoggingIn = async () => {
+    // Check credentials before logging in
     checkInvalidCredentials({type: 'EMAIL'});
     checkInvalidCredentials({type: 'PASSWORD'});
     if (
@@ -85,7 +94,27 @@ const LoginScreen = (): JSX.Element => {
       setAuthenticating(true);
       try {
         const response = await login(inputs);
-        console.log(response);
+        const {name, email, avatar, spending} = response.data;
+
+        // Set user state
+        dispatch(
+          setUser({
+            id: response.id,
+            token: response.token,
+            email,
+            name,
+            avatar,
+            spending,
+          }),
+        );
+
+        // Store email, password, token in local
+        if (checked)
+          storeAuthData(
+            response.token,
+            response.data.email,
+            response.data.password,
+          );
       } catch (error: any) {
         const response = error.response;
         if (response.status === 401)
@@ -99,6 +128,7 @@ const LoginScreen = (): JSX.Element => {
   };
 
   if (isAuthenticating) return <LoadingOverlay message="Logging in ..." />;
+  if (user.token) return <MaiScreen />;
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
