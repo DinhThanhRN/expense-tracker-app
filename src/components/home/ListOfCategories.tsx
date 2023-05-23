@@ -13,35 +13,43 @@ import {Colors} from '../../configs/colors';
 import {CATEGORIES} from '../../data/category';
 
 interface Props {
+  isContainAll?: Boolean;
   containerStyle?: ViewStyle;
+  category?: String;
   onPress: (category: String) => void;
 }
 
-const ListOfCategories = ({containerStyle, onPress}: Props): JSX.Element => {
-  const [focused, setFocused] = useState(0);
+const ListOfCategories = ({
+  category,
+  isContainAll = true,
+  containerStyle,
+  onPress,
+}: Props): JSX.Element => {
+  const initialCategory = category ?? (isContainAll && 'All');
+  const [focusedCategory, setFocusedCategory] = useState(initialCategory);
 
   const renderItem = ({item, index}: any) => {
     return (
       <View style={styles.categoryContainer}>
         <Pressable
           style={
-            focused === index
+            focusedCategory === item.name
               ? [styles.category, {backgroundColor: Colors.theme}]
               : styles.category
           }
           onPress={() => {
-            setFocused(index);
+            setFocusedCategory(item.name);
             onPress(item.name);
           }}>
           <Icon
             name={item.icon}
-            color={focused === index ? Colors.white : '#97acc9'}
+            color={focusedCategory === item.name ? Colors.white : '#97acc9'}
             size={30}
           />
         </Pressable>
         <Text
           style={
-            focused === index
+            focusedCategory === item.name
               ? [styles.text, {color: Colors.theme}]
               : styles.text
           }>
@@ -53,7 +61,11 @@ const ListOfCategories = ({containerStyle, onPress}: Props): JSX.Element => {
   return (
     <View style={[styles.container, containerStyle]}>
       <FlatList
-        data={CATEGORIES}
+        data={
+          isContainAll
+            ? CATEGORIES
+            : CATEGORIES.filter((_, index) => index !== 0)
+        }
         renderItem={renderItem}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

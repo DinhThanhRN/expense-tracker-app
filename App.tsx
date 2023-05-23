@@ -9,6 +9,7 @@ import LoginScreen from './src/screens/auth/LoginScreen';
 import SignupScreen from './src/screens/auth/SignupSceen';
 import {store} from './src/reducers/store';
 import MaiScreen from './src/screens/main/MainScreen';
+import TransactionEditor from './src/screens/main/TransactionEditor';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,10 @@ const App = (): JSX.Element => {
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="SignupScreen" component={SignupScreen} />
           <Stack.Screen name="MainScreen" component={MaiScreen} />
+          <Stack.Screen
+            name="TransactionEditorScreen"
+            component={TransactionEditor}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

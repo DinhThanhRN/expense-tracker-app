@@ -1,14 +1,22 @@
 import React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  ViewStyle,
+} from 'react-native';
 import {Colors} from '../../configs/colors';
 
 interface Props {
-  message: String;
+  message?: String;
+  // backgroundColor?: string;
+  style?: ViewStyle;
 }
 
-const LoadingOverlay = ({message}: Props): JSX.Element => {
+const LoadingOverlay = ({message, style}: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.message}>{message}</Text>
       <ActivityIndicator size="large" />
     </View>

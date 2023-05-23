@@ -1,35 +1,32 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, ViewStyle} from 'react-native';
 import {Calendar, DateData} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Colors} from '../../configs/colors';
-import FlatButton from '../ui/FlatButton';
+import FlatButton from './FlatButton';
 
 interface Props {
   date: DateData;
-  onPress?: (day: DateData) => void;
   onReset?: () => void;
-  onClose?: () => void;
+  onClose: (day: DateData) => void;
+  style?: ViewStyle;
 }
 
-const MyCalendar = ({date, onPress, onReset, onClose}: Props): JSX.Element => {
+const MyCalendar = ({date, onReset, onClose, style}: Props): JSX.Element => {
   const [selected, setSelected] = useState<DateData>(date);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Pressable
         style={({pressed}) =>
           pressed ? [styles.close, {opacity: 0.5}] : styles.close
         }
-        onPress={onClose}>
+        onPress={() => onClose(selected)}>
         <Icon name="close" size={24} color="red" />
       </Pressable>
       <Calendar
         style={styles.calendar}
-        onDayPress={day => {
-          setSelected(day);
-          if (onPress) onPress(day);
-        }}
+        onDayPress={day => setSelected(day)}
         markedDates={
           selected && {
             [selected.dateString]: {
@@ -54,7 +51,7 @@ export default MyCalendar;
 const styles = StyleSheet.create({
   container: {
     top: 130,
-    bottom: 160,
+    bottom: 130,
     left: 50,
     right: 50,
     backgroundColor: Colors.white,
@@ -62,12 +59,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
     borderRadius: 12,
     justifyContent: 'center',
-    // alignItems: 'center',
   },
   calendar: {
     width: '100%',
+    height: '80%',
     borderRadius: 16,
-    // backgroundColor: Colors.dark,
   },
   button: {
     height: 40,

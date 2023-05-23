@@ -41,7 +41,8 @@ const LoginScreen = (): JSX.Element => {
   const {user} = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [inputs, setInputs] = useState<any>({email: '', password: ''});
+  const initialInputs = {email: '', password: ''};
+  const [inputs, setInputs] = useState<any>(initialInputs);
   const [checked, setChecked] = useState(false);
   const [isAuthenticating, setAuthenticating] = useState(false);
 
@@ -115,6 +116,7 @@ const LoginScreen = (): JSX.Element => {
             response.data.email,
             response.data.password,
           );
+        setInputs(initialInputs);
       } catch (error: any) {
         const response = error.response;
         if (response.status === 401)
@@ -136,6 +138,7 @@ const LoginScreen = (): JSX.Element => {
           label="Email"
           placeholder="Type your email"
           errorMessage={invalidCredentialsChecker.invalidEmail && 'Wrong email'}
+          inputContainerStyle={{borderRadius: 8}}
           inputProps={{
             defaultValue: inputs.email,
             onChangeText: (text: String) => setInputs({...inputs, email: text}),
@@ -148,6 +151,7 @@ const LoginScreen = (): JSX.Element => {
           errorMessage={
             invalidCredentialsChecker.invalidPassword && 'Wrong password'
           }
+          inputContainerStyle={{borderRadius: 8}}
           secure={true}
           inputProps={{
             defaultValue: inputs.password,

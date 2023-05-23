@@ -14,7 +14,7 @@ export const CATEGORIES: Category[] = [
   {
     name: 'Food',
     icon: 'food',
-    color: '#09ece3',
+    color: '#F42cd5',
   },
   {
     name: 'Move',
@@ -24,7 +24,7 @@ export const CATEGORIES: Category[] = [
   {
     name: 'Relax',
     icon: 'human-female-female',
-    color: '#469EEC',
+    color: '#F4802c',
   },
   {
     name: 'Living',

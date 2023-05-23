@@ -9,6 +9,7 @@ import {statisticExpense} from '../../utils/functions/communicateAPI';
 import {RootState} from '../../reducers/store';
 import {createPlainAlert} from '../error/createPlainAlert';
 import {CATEGORIES} from '../../data/category';
+import LoadingOverlay from '../ui/LoadingOverlay';
 
 interface Props {
   containerStyle?: ViewStyle;
@@ -17,9 +18,13 @@ interface Props {
 const Statistics = ({containerStyle}: Props): JSX.Element => {
   const {user} = useSelector((state: RootState) => state.user);
   const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    statisticExpense(user.id, user.token)
-      .then(response => {
+    (async () => {
+      setLoading(true);
+      try {
+        const response = await statisticExpense(user.id, user.token);
         const temp = response.map((item: any) => {
           const color = CATEGORIES.find(
             category => category.name === item.category,
@@ -27,11 +32,14 @@ const Statistics = ({containerStyle}: Props): JSX.Element => {
           return {value: item.spending, text: item.category, color};
         });
         setData(temp);
-      })
-      .catch(err =>
-        createPlainAlert('Get statistic fail!', 'Please try again'),
-      );
+      } catch (error) {
+        console.log('Error from statistic: ', error);
+        createPlainAlert('Get statistic fail!', 'Please try again');
+      }
+      setLoading(false);
+    })();
   }, []);
+  if (loading) return <LoadingOverlay style={styles.overlay} />;
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.sumContainer}>
@@ -72,5 +80,9 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  overlay: {
+    flex: 0.45,
+    backgroundColor: Colors.theme,
   },
 });

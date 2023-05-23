@@ -1,33 +1,70 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import React, {ReactNode, useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  Pressable,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Colors} from '../../configs/colors';
 import {Sizes} from '../../configs/sizes';
 
 interface Props {
-  label: String;
+  label?: String;
+  labelStyle?: TextStyle;
   placeholder?: String;
   errorMessage?: String;
   secure?: Boolean;
   inputProps?: any;
+  containerStyle?: ViewStyle;
+  inputContainerStyle?: ViewStyle;
+  rightIcon?: ReactNode;
+  onPressRightIcon?: () => void;
+  leftIcon?: ReactNode;
+  onPressLeftIcon?: () => void;
 }
 
 const Input = ({
   label,
+  labelStyle,
   placeholder,
   errorMessage,
   secure,
   inputProps,
+  containerStyle,
+  inputContainerStyle,
+  rightIcon,
+  onPressRightIcon = () => {},
+  leftIcon,
+  onPressLeftIcon = () => {},
 }: Props): JSX.Element => {
   const [hidden, setHidden] = useState(secure);
+  const inputRef = useRef<TextInput>(null);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
+    <View style={[styles.container, containerStyle]}>
+      <Text style={[styles.label, labelStyle]}>{label}</Text>
+      <View style={[styles.inputContainer, inputContainerStyle]}>
+        {leftIcon && (
+          <Pressable
+            onPress={onPressLeftIcon}
+            style={({pressed}) => [styles.icon, pressed && {opacity: 0.5}]}>
+            {leftIcon}
+          </Pressable>
+        )}
         <TextInput
-          style={secure ? [styles.input, {width: '90%'}] : styles.input}
+          ref={inputRef}
           {...inputProps}
+          style={[
+            styles.input,
+            inputProps?.style,
+            (secure || rightIcon || leftIcon) && {width: '90%'},
+            leftIcon && rightIcon && {width: '80%'},
+          ]}
           placeholder={placeholder}
           secureTextEntry={hidden}
         />
@@ -38,6 +75,16 @@ const Input = ({
             color={Colors.dark}
             onPress={() => setHidden(!hidden)}
           />
+        )}
+        {rightIcon && (
+          <Pressable
+            onPress={() => {
+              onPressRightIcon();
+              inputRef.current?.focus();
+            }}
+            style={({pressed}) => [styles.icon, pressed && {opacity: 0.5}]}>
+            {rightIcon}
+          </Pressable>
         )}
       </View>
       {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
@@ -52,7 +99,6 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 110,
     marginBottom: Sizes.globalPadding,
-    alignContent: 'center',
   },
   label: {
     color: Colors.white,
@@ -62,7 +108,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     backgroundColor: Colors.white,
-    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 4,
@@ -73,6 +118,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     color: Colors.dark,
+  },
+  icon: {
+    marginHorizontal: Sizes.globalPadding,
   },
   error: {
     color: 'red',

@@ -1,9 +1,9 @@
 interface Expense {
-  _id: String;
+  _id?: String;
   category: String;
   paidAt: String;
   paidFor: String;
-  price: Number;
+  price: number;
 }
 
 export default Expense;

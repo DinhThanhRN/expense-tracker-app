@@ -1,7 +1,7 @@
 import Expense from '../../interfaces/Expense';
 
 export const groupExpensesWithSameDate = (data: [Expense]) => {
-  if (data) {
+  if (data[0]) {
     const result: any = [];
     const getDate = (date: String) => {
       return date.substring(0, date.indexOf('T')) + 'T00:00:00';
@@ -28,8 +28,8 @@ const calcDayPass = (date: string) => {
 };
 
 export const formatDate = (date: string) => {
-  if (calcDayPass(date) === 0) return 'TODAY';
-  if (calcDayPass(date) === -1) return 'YESTERDAY';
+  if (calcDayPass(date) === 0) return 'Today';
+  if (calcDayPass(date) === -1) return 'Yesterday';
   return new Intl.DateTimeFormat('en-GB', {
     month: 'long',
     day: 'numeric',

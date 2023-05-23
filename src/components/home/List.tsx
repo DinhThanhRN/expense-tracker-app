@@ -7,21 +7,29 @@ import ListOfCategories from './ListOfCategories';
 import ListOfExpenses from './ListOfExpenses';
 import {groupExpensesWithSameDate} from '../../utils/functions/formater';
 import Expense from '../../interfaces/Expense';
+import LoadingOverlay from '../ui/LoadingOverlay';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reducers/store';
 
 interface Props {
+  loading?: Boolean;
   data: [Expense];
   containerStyle?: ViewStyle;
   onPress: (category: String) => void;
 }
 
-const List = ({data, containerStyle, onPress}: Props): JSX.Element => {
+const List = ({data, loading, containerStyle, onPress}: Props): JSX.Element => {
   return (
     <View style={[styles.container, containerStyle]}>
       <ListOfCategories onPress={onPress} containerStyle={{flex: 0.25}} />
-      <ListOfExpenses
-        data={groupExpensesWithSameDate(data)}
-        containerStyle={{flex: 0.75}}
-      />
+      {loading ? (
+        <LoadingOverlay style={styles.overlay} />
+      ) : (
+        <ListOfExpenses
+          data={groupExpensesWithSameDate(data)}
+          containerStyle={{flex: 0.75}}
+        />
+      )}
     </View>
   );
 };
@@ -35,5 +43,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopStartRadius: 16,
     borderTopEndRadius: 16,
+  },
+  overlay: {
+    flex: 0.75,
+    marginTop: 4,
+    backgroundColor: Colors.white,
   },
 });

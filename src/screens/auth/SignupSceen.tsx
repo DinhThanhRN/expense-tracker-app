@@ -128,6 +128,7 @@ const SignupScreen = (): JSX.Element => {
             defaultValue: inputs.name,
             onChangeText: (text: String) => setInputs({...inputs, name: text}),
           }}
+          inputContainerStyle={{borderRadius: 8}}
         />
         <Input
           label="Email"
@@ -140,6 +141,7 @@ const SignupScreen = (): JSX.Element => {
             onChangeText: (text: String) => setInputs({...inputs, email: text}),
             onEndEditing: () => checkInvalidRegistration({type: 'EMAIL'}),
           }}
+          inputContainerStyle={{borderRadius: 8}}
         />
         <Input
           label="Password"
@@ -154,6 +156,7 @@ const SignupScreen = (): JSX.Element => {
             onEndEditing: () => checkInvalidRegistration({type: 'PASSWORD'}),
           }}
           secure={true}
+          inputContainerStyle={{borderRadius: 8}}
         />
         <Input
           label="Confirm Password"
@@ -163,6 +166,7 @@ const SignupScreen = (): JSX.Element => {
             'Password confirm is not compatible'
           }
           secure={true}
+          inputContainerStyle={{borderRadius: 8}}
           inputProps={{
             defaultValue: inputs.passwordConfirm,
             onChangeText: (text: String) =>

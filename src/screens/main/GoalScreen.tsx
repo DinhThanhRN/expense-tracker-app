@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useLayoutEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useLayoutEffect, useRef} from 'react';
+import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {BottomTabProps} from '../../types/NavigationProps';
@@ -20,12 +20,25 @@ const GoalScreen = (): JSX.Element => {
       ),
     });
   }, []);
+  const inputRef = useRef<TextInput>(null);
+
+  const handleButtonPress = () => {
+    inputRef.current?.focus();
+  };
+
   return (
-    <View>
-      <Text>Goal Screen</Text>
-    </View>
+    <>
+      <TextInput ref={inputRef} />
+      <Button title="Focus TextInput" onPress={handleButtonPress} />
+    </>
   );
 };
+//   return (
+//     <View>
+//       <Text>Goal Screen</Text>
+//     </View>
+//   );
+// };
 
 export default GoalScreen;
 

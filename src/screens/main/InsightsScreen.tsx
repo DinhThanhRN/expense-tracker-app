@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 const InsightsScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -20,8 +21,9 @@ const InsightsScreen = (): JSX.Element => {
       ),
     });
   }, []);
+
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Insights Screen</Text>
     </View>
   );
@@ -30,5 +32,14 @@ const InsightsScreen = (): JSX.Element => {
 export default InsightsScreen;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: Colors.theme,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
