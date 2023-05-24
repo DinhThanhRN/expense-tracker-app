@@ -27,3 +27,24 @@ export const signup = async (registration: Registration) => {
     data: response.data.user,
   };
 };
+
+export const forgotPassword = async (email: String) => {
+  const {data: response} = await axios.post(
+    `${BACKEND_URL}/users/forgotPassword`,
+    {email},
+  );
+  return response;
+};
+
+export const resetPassword = async (
+  resetToken: string,
+  password: String,
+  passwordConfirm: String,
+) => {
+  const {data: response} = await axios.patch(
+    `${BACKEND_URL}/users/resetPassword/${resetToken}`,
+    {password, passwordConfirm},
+  );
+  console.log(response);
+  return response.data;
+};
