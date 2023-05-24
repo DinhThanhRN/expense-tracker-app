@@ -8,6 +8,7 @@ import InsightsScreen from './InsightsScreen';
 import AccountScreen from './AccountScreen';
 import {Colors} from '../../configs/colors';
 import GoalScreen from './GoalScreen';
+import {Sizes} from '../../configs/sizes';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -36,7 +37,7 @@ const MaiScreen = (): JSX.Element => {
             <Icon
               name="home"
               color={focused ? Colors.theme : Colors.white}
-              size={30}
+              size={Sizes.icon}
             />
           ),
           tabBarLabel: 'Home',
@@ -50,7 +51,7 @@ const MaiScreen = (): JSX.Element => {
             <Icon
               name="chart-bar"
               color={focused ? Colors.theme : Colors.white}
-              size={30}
+              size={Sizes.icon}
             />
           ),
           tabBarLabel: 'Insights',
@@ -64,7 +65,7 @@ const MaiScreen = (): JSX.Element => {
             <Icon
               name="target"
               color={focused ? Colors.theme : Colors.white}
-              size={30}
+              size={Sizes.icon}
             />
           ),
           tabBarLabel: 'Goal',
@@ -78,7 +79,7 @@ const MaiScreen = (): JSX.Element => {
             <Icon
               name="account"
               color={focused ? Colors.theme : Colors.white}
-              size={30}
+              size={Sizes.icon}
             />
           ),
           tabBarLabel: 'Account',

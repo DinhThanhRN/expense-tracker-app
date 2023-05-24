@@ -96,7 +96,7 @@ const TransactionEditor = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
 
   const renderRightIcon = (): ReactNode => {
-    return <Icon name="calendar" color={Colors.theme} size={30} />;
+    return <Icon name="calendar" color={Colors.theme} size={Sizes.icon} />;
   };
 
   const handleSummiting = async () => {

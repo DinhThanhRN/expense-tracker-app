@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
+import {Sizes} from '../../configs/sizes';
 
 const GoalScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -15,7 +16,7 @@ const GoalScreen = (): JSX.Element => {
         <Icon
           name="target"
           color={focused ? Colors.theme : Colors.white}
-          size={30}
+          size={Sizes.icon}
         />
       ),
     });

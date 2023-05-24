@@ -138,7 +138,7 @@ const LoginScreen = (): JSX.Element => {
           label="Email"
           placeholder="Type your email"
           errorMessage={invalidCredentialsChecker.invalidEmail && 'Wrong email'}
-          inputContainerStyle={{borderRadius: 8}}
+          inputContainerStyle={{borderRadius: Sizes.globalBorderRadius}}
           inputProps={{
             defaultValue: inputs.email,
             onChangeText: (text: String) => setInputs({...inputs, email: text}),
@@ -151,7 +151,7 @@ const LoginScreen = (): JSX.Element => {
           errorMessage={
             invalidCredentialsChecker.invalidPassword && 'Wrong password'
           }
-          inputContainerStyle={{borderRadius: 8}}
+          inputContainerStyle={{borderRadius: Sizes.globalBorderRadius}}
           secure={true}
           inputProps={{
             defaultValue: inputs.password,
@@ -165,7 +165,10 @@ const LoginScreen = (): JSX.Element => {
             <CheckBox check={checked} onPress={() => setChecked(!checked)} />
             <Text style={styles.text}>Remenber me</Text>
           </View>
-          <PressableText>Reset password</PressableText>
+          <PressableText
+            onPress={() => navigation.navigate('PasswordResetScreen')}>
+            Reset password
+          </PressableText>
         </View>
         <FlatButton label="Login" onPress={handleLoggingIn} />
         <View style={styles.bottom}>

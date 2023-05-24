@@ -25,6 +25,7 @@ import MyCalendar from '../../components/ui/MyCalendar';
 import {UserState} from '../../reducers/user';
 import {setExpenses} from '../../reducers/expense';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import {Sizes} from '../../configs/sizes';
 
 const HomeScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -36,7 +37,7 @@ const HomeScreen = (): JSX.Element => {
         <Icon
           name="home"
           color={focused ? Colors.theme : Colors.white}
-          size={30}
+          size={Sizes.icon}
         />
       ),
       tabBarLabel: 'Home',

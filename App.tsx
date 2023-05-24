@@ -10,6 +10,7 @@ import SignupScreen from './src/screens/auth/SignupSceen';
 import {store} from './src/reducers/store';
 import MaiScreen from './src/screens/main/MainScreen';
 import TransactionEditor from './src/screens/main/TransactionEditor';
+import PasswordResetScreen from './src/screens/auth/PasswordResetScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,10 @@ const App = (): JSX.Element => {
           <Stack.Screen
             name="TransactionEditorScreen"
             component={TransactionEditor}
+          />
+          <Stack.Screen
+            name="PasswordResetScreen"
+            component={PasswordResetScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

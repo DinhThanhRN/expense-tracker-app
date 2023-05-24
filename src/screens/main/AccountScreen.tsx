@@ -53,7 +53,7 @@ const AccountScreen = (): JSX.Element => {
         <Icon
           name="account"
           color={focused ? Colors.theme : Colors.white}
-          size={30}
+          size={Sizes.icon}
         />
       ),
     });
@@ -232,7 +232,9 @@ const AccountScreen = (): JSX.Element => {
             label="Name"
             labelStyle={styles.inputLable}
             placeholder="Type your name"
-            leftIcon={<Icon name="account" size={30} color={Colors.dark} />}
+            leftIcon={
+              <Icon name="account" size={Sizes.icon} color={Colors.dark} />
+            }
             rightIcon={<Icon name="pencil" size={24} color={Colors.dark} />}
             onPressRightIcon={() => {
               changeAllowedInfor({type: 'NAME'});
@@ -254,7 +256,9 @@ const AccountScreen = (): JSX.Element => {
             label="Email"
             labelStyle={styles.inputLable}
             placeholder="Type your email"
-            leftIcon={<Icon name="email" size={30} color={Colors.dark} />}
+            leftIcon={
+              <Icon name="email" size={Sizes.icon} color={Colors.dark} />
+            }
             rightIcon={<Icon name="pencil" size={24} color={Colors.dark} />}
             onPressRightIcon={() => {
               changeAllowedInfor({type: 'EMAIL'});
@@ -276,8 +280,9 @@ const AccountScreen = (): JSX.Element => {
             label="Password"
             labelStyle={styles.inputLable}
             placeholder="Type your password"
-            leftIcon={<Icon name="key" size={30} color={Colors.dark} />}
+            leftIcon={<Icon name="key" size={Sizes.icon} color={Colors.dark} />}
             rightIcon={<Icon name="pencil" size={24} color={Colors.dark} />}
+            onPressRightIcon={() => navigation.navigate('PasswordResetScreen')}
             containerStyle={{flex: 0.33}}
             inputContainerStyle={styles.input}
             inputProps={{

@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Colors} from '../../configs/colors';
 import {CATEGORIES} from '../../data/category';
+import {Sizes} from '../../configs/sizes';
 
 interface Props {
   isContainAll?: Boolean;
@@ -44,7 +45,7 @@ const ListOfCategories = ({
           <Icon
             name={item.icon}
             color={focusedCategory === item.name ? Colors.white : '#97acc9'}
-            size={30}
+            size={Sizes.icon}
           />
         </Pressable>
         <Text

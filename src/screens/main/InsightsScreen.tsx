@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import {Sizes} from '../../configs/sizes';
 
 const InsightsScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -16,7 +17,7 @@ const InsightsScreen = (): JSX.Element => {
         <Icon
           name="chart-bar"
           color={focused ? Colors.theme : Colors.white}
-          size={30}
+          size={Sizes.icon}
         />
       ),
     });
@@ -34,7 +35,7 @@ export default InsightsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.theme,
+    backgroundColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
   },
