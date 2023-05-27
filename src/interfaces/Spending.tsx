@@ -1,8 +1,9 @@
 interface Spending {
-  id: String;
-  saving: Number;
+  _id: String;
+  expense: Number;
   income: Number;
-  month: String;
+  month: Number;
+  year: Number;
 }
 
 export default Spending;

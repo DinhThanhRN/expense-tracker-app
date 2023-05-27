@@ -95,7 +95,7 @@ const LoginScreen = (): JSX.Element => {
       setAuthenticating(true);
       try {
         const response = await login(inputs);
-        const {name, email, avatar, spending} = response.data;
+        const {name, email, avatar} = response.data;
 
         // Set user state
         dispatch(
@@ -105,7 +105,6 @@ const LoginScreen = (): JSX.Element => {
             email,
             name,
             avatar,
-            spending,
           }),
         );
 

@@ -1,16 +1,9 @@
-import React, {useCallback, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SectionList,
-  ViewStyle,
-  RefreshControl,
-} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet, SectionList, ViewStyle} from 'react-native';
 
 import Expense from '../../interfaces/Expense';
 import {Sizes} from '../../configs/sizes';
-import {formatDate, formatNumber} from '../../utils/functions/formater';
+import {formatDate} from '../../utils/functions/formater';
 import OverlayButton from '../ui/OverlayButton';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from '../../types/NavigationProps';
@@ -35,7 +28,6 @@ const ListOfExpenses = ({data, containerStyle}: Props): JSX.Element => {
   const renderSectionHeader = ({section: {date}}: any) => {
     return <Text style={styles.date}>{formatDate(date)}</Text>;
   };
-
   return (
     <View style={[styles.container, containerStyle]}>
       <OverlayButton

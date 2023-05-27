@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useLayoutEffect, useRef} from 'react';
-import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
 import {Sizes} from '../../configs/sizes';
+import MonthPicker from 'react-native-month-year-picker';
 
 const GoalScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -21,17 +22,39 @@ const GoalScreen = (): JSX.Element => {
       ),
     });
   }, []);
-  const inputRef = useRef<TextInput>(null);
 
-  const handleButtonPress = () => {
-    inputRef.current?.focus();
-  };
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const showPicker = useCallback(
+    (value: boolean | ((prevState: boolean) => boolean)) => setShow(value),
+    [],
+  );
+  const onValueChange = useCallback(
+    (_event: any, newDate: Date) => {
+      const selectedDate = newDate || date;
+      showPicker(false);
+      setDate(selectedDate);
+    },
+    [date, showPicker],
+  );
 
   return (
-    <>
-      <TextInput ref={inputRef} />
-      <Button title="Focus TextInput" onPress={handleButtonPress} />
-    </>
+    <View>
+      <Text>{date.toString()}</Text>
+      <TouchableOpacity onPress={() => setShow(true)}>
+        <Text>OPEN</Text>
+      </TouchableOpacity>
+      {show && (
+        <MonthPicker
+          onChange={onValueChange}
+          value={date}
+          minimumDate={new Date()}
+          maximumDate={new Date(2025, 5)}
+          locale="vn-VN"
+        />
+      )}
+    </View>
   );
 };
 //   return (

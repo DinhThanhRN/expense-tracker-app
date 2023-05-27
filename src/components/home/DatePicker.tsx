@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
-import {DateData} from 'react-native-calendars';
 
 import {Colors} from '../../configs/colors';
 
 interface Props {
   onPress?: () => void;
-  date: DateData;
+  date: Date;
 }
+
 const DatePicker = ({date, onPress}: Props): JSX.Element => {
   return (
     <Pressable
@@ -17,8 +17,8 @@ const DatePicker = ({date, onPress}: Props): JSX.Element => {
         <Text style={styles.text}>
           {new Intl.DateTimeFormat('en-GB', {
             month: 'long',
-            day: 'numeric',
-          }).format(new Date(date.timestamp))}
+            year: '2-digit',
+          }).format(new Date(date))}
         </Text>
       </View>
     </Pressable>
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   text: {
     color: Colors.white,

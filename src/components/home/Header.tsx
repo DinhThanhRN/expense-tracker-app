@@ -6,10 +6,9 @@ import {Sizes} from '../../configs/sizes';
 import DatePicker from './DatePicker';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../reducers/store';
-import {DateData} from 'react-native-calendars';
 
 interface Props {
-  date: DateData;
+  date: Date;
   pressed?: Boolean;
   onPress?: () => void;
 }

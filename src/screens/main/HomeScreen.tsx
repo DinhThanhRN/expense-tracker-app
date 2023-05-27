@@ -1,13 +1,14 @@
 import {useNavigation, useNavigationState} from '@react-navigation/native';
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  PanResponder,
-} from 'react-native';
+import React, {
+  useLayoutEffect,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
+import {View, StyleSheet, PanResponder} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {DateData} from 'react-native-calendars';
+import MonthPicker from 'react-native-month-year-picker';
 
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
@@ -21,7 +22,6 @@ import {
   getExpensesByCategory,
 } from '../../utils/functions/communicateAPI';
 import Header from '../../components/home/Header';
-import MyCalendar from '../../components/ui/MyCalendar';
 import {UserState} from '../../reducers/user';
 import {setExpenses} from '../../reducers/expense';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
@@ -51,18 +51,29 @@ const HomeScreen = (): JSX.Element => {
   const [category, setCategory] = useState<any>('All');
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [openCalendar, setOpenCalendar] = useState(false);
   const [queryString, setQueryString] = useState('');
-  const now = new Date();
 
-  const date = {
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-    day: now.getDate(),
-    timestamp: now.getTime(),
-    dateString: now.toISOString().substring(0, now.toISOString().indexOf('T')),
-  };
-  const [day, setDay] = useState<DateData>(date);
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const showDatePicker = useCallback(
+    (value: boolean | ((prevState: boolean) => boolean)) =>
+      setShowPicker(value),
+    [],
+  );
+  const onDateChange = useCallback(
+    (_event: any, newDate: Date) => {
+      const selectedDate = newDate || date;
+      showDatePicker(false);
+      setQueryString(
+        `month=${
+          selectedDate?.getMonth() + 1
+        }&year=${selectedDate?.getFullYear()}`,
+      );
+      setDate(selectedDate);
+    },
+    [date, showPicker],
+  );
 
   const panResponder = useRef(
     PanResponder.create({
@@ -104,15 +115,12 @@ const HomeScreen = (): JSX.Element => {
 
   useEffect(() => {
     loadData();
-  }, [category, day, queryString, index]);
+  }, [category, date, queryString, index]);
   if (refresh) return <LoadingOverlay />;
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Header onPress={() => setOpenCalendar(true)} date={day} />
-      {/* <TouchableWithoutFeedback
-        style={{flex: 0.9}}
-        onPress={() => setOpenCalendar(false)}> */}
-      <View style={openCalendar ? {flex: 0.9, opacity: 0.6} : {flex: 0.9}}>
+      <Header onPress={() => setShowPicker(true)} date={date} />
+      <View style={{flex: 0.9}}>
         <Statistics containerStyle={{flex: 0.45}} />
         <List
           loading={loading}
@@ -121,21 +129,7 @@ const HomeScreen = (): JSX.Element => {
           onPress={text => setCategory(text)}
         />
       </View>
-      {/* </TouchableWithoutFeedback> */}
-      {openCalendar && (
-        <MyCalendar
-          date={date}
-          onReset={() => {
-            setQueryString('');
-            setOpenCalendar(false);
-          }}
-          onClose={day => {
-            setOpenCalendar(false);
-            setDay(day);
-            setQueryString(`month=${day?.month}&year=${day?.year}`);
-          }}
-        />
-      )}
+      {showPicker && <MonthPicker value={date} onChange={onDateChange} />}
     </View>
   );
 };
