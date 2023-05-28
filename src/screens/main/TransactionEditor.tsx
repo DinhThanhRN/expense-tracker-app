@@ -174,6 +174,7 @@ const TransactionEditor = (): JSX.Element => {
               defaultValue: inputs.price + '',
               onChangeText: (text: string) =>
                 setInputs({...inputs, price: +text}),
+              keyboardType: 'numeric',
             }}
           />
           <ListOfCategories

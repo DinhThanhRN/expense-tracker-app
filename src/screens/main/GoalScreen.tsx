@@ -7,6 +7,7 @@ import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
 import {Sizes} from '../../configs/sizes';
 import MonthPicker from 'react-native-month-year-picker';
+import NumberPicker from '../../components/insight/NumberPicker';
 
 const GoalScreen = (): JSX.Element => {
   const navigation = useNavigation<BottomTabProps>();
@@ -23,46 +24,12 @@ const GoalScreen = (): JSX.Element => {
     });
   }, []);
 
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const showPicker = useCallback(
-    (value: boolean | ((prevState: boolean) => boolean)) => setShow(value),
-    [],
-  );
-  const onValueChange = useCallback(
-    (_event: any, newDate: Date) => {
-      const selectedDate = newDate || date;
-      showPicker(false);
-      setDate(selectedDate);
-    },
-    [date, showPicker],
-  );
-
   return (
     <View>
-      <Text>{date.toString()}</Text>
-      <TouchableOpacity onPress={() => setShow(true)}>
-        <Text>OPEN</Text>
-      </TouchableOpacity>
-      {show && (
-        <MonthPicker
-          onChange={onValueChange}
-          value={date}
-          minimumDate={new Date()}
-          maximumDate={new Date(2025, 5)}
-          locale="vn-VN"
-        />
-      )}
+      <Text>Goal Screen</Text>
     </View>
   );
 };
-//   return (
-//     <View>
-//       <Text>Goal Screen</Text>
-//     </View>
-//   );
-// };
 
 export default GoalScreen;
 

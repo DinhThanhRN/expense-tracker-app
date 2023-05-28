@@ -22,6 +22,7 @@
     "react": "18.2.0",
     "react-native": "0.71.4",
     "react-native-calendars": "^1.1297.0",
+    "react-native-collapsible": "^1.6.1",
     "react-native-gesture-handler": "^2.10.1",
     "react-native-gifted-charts": "^1.2.42",
     "react-native-image-crop-picker": "^0.39.0",
