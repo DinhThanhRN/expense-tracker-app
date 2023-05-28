@@ -22,7 +22,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../reducers/store';
 import IconButton from '../../components/ui/IconButton';
 import {removeUser, setUser, updateUser} from '../../reducers/user';
-import {updateAccount} from '../../utils/functions/communicateAPI';
+import {updateAccount} from '../../utils/functions/api/user';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import PressableText from '../../components/ui/PressableText';
 import ImageCropPicker from 'react-native-image-crop-picker';

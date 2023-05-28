@@ -31,7 +31,7 @@ import {
   createNewExpense,
   deleteExpense,
   editExpense,
-} from '../../utils/functions/communicateAPI';
+} from '../../utils/functions/api/expense';
 import {AppDispatch, RootState} from '../../reducers/store';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import {NavigationProps} from '../../types/NavigationProps';

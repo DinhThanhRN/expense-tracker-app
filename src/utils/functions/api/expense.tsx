@@ -1,15 +1,6 @@
 import axios from 'axios';
-import {BACKEND_URL} from '../backend_url';
-import Expense from '../../interfaces/Expense';
-
-export const getAllCategories = async (token: String) => {
-  const {data: response} = await axios.get(`${BACKEND_URL}/categories`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data.category;
-};
+import Expense from '../../../interfaces/Expense';
+import {BACKEND_URL} from '../../backend_url';
 
 export const getOwnExpenses = async (
   userID: String,
@@ -84,7 +75,6 @@ export const editExpense = async (id: String, token: String, data: Expense) => {
       },
     },
   );
-  console.log(response);
   return response.data.expense;
 };
 export const deleteExpense = async (id: String, token: String) => {
@@ -93,18 +83,4 @@ export const deleteExpense = async (id: String, token: String) => {
       Authorization: `Bearer ${token}`,
     },
   });
-};
-
-export const updateAccount = async (token: String, data: any) => {
-  const {data: response} = await axios.patch(
-    `${BACKEND_URL}/users/updateMe`,
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  return response.data.user;
 };

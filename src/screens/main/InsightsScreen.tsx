@@ -10,7 +10,7 @@ import {Sizes} from '../../configs/sizes';
 import ComparisionBarChart from '../../components/insight/ComparisonBarChart';
 import OwnAreaChart from '../../components/insight/OwnAreaChart';
 import Expense from '../../interfaces/Expense';
-import {getOwnExpenses} from '../../utils/functions/communicateAPI';
+import {getOwnExpenses} from '../../utils/functions/api/expense';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../reducers/store';
 

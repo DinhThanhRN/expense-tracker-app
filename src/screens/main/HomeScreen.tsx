@@ -20,7 +20,7 @@ import {createPlainAlert} from '../../components/error/createPlainAlert';
 import {
   getOwnExpenses,
   getExpensesByCategory,
-} from '../../utils/functions/communicateAPI';
+} from '../../utils/functions/api/expense';
 import Header from '../../components/home/Header';
 import {UserState} from '../../reducers/user';
 import {setExpenses} from '../../reducers/expense';

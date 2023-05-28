@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {Colors} from '../../configs/colors';
 import Chart from './Chart';
 import {Sizes} from '../../configs/sizes';
-import {statisticExpense} from '../../utils/functions/communicateAPI';
+import {statisticExpense} from '../../utils/functions/api/expense';
 import {RootState} from '../../reducers/store';
 import {createPlainAlert} from '../error/createPlainAlert';
 import {CATEGORIES} from '../../data/category';
