@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, TextInput} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+  Alert,
+  ViewStyle,
+} from 'react-native';
 import {LineChart} from 'react-native-gifted-charts';
 
 import {Colors} from '../../configs/colors';
@@ -7,46 +15,11 @@ import {Sizes} from '../../configs/sizes';
 import HeaderOfChart from './HeaderOfChart';
 import Expense from '../../interfaces/Expense';
 import LoadingOverlay from '../ui/LoadingOverlay';
+import {Spending} from '../../interfaces/Spending';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reducers/store';
+import {getSpendingStatistic} from '../../utils/functions/api/spending';
 
-interface Props {
-  data?: Expense[];
-  month?: number;
-  onChangeMonth?: (month: number) => void;
-  loading?: boolean;
-}
-
-const DATA = [
-  {
-    month: 1,
-    year: 2023,
-    totalAmmount: 2320000,
-  },
-  {
-    month: 2,
-    year: 2023,
-    totalAmmount: 2180000,
-  },
-  {
-    month: 3,
-    year: 2023,
-    totalAmmount: 1760000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    totalAmmount: 3200000,
-  },
-  {
-    month: 5,
-    year: 2023,
-    totalAmmount: 1590000,
-  },
-  {
-    month: 6,
-    year: 2023,
-    totalAmmount: 2430000,
-  },
-];
 const customDataPoint = () => {
   return (
     <View
@@ -63,134 +36,127 @@ const customDataPoint = () => {
 };
 const customLabel = (val: any) => {
   return (
-    <View style={{width: 70, marginLeft: 7}}>
-      <Text style={{color: Colors.dark, fontWeight: 'bold'}}>{val}</Text>
+    <View
+      style={{
+        width: 70,
+        marginLeft: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text
+        style={{color: Colors.dark, fontWeight: 'bold', textAlign: 'center'}}>
+        {val}
+      </Text>
     </View>
   );
 };
-const convertDataToChartData = (data: any) => {
-  return data.map((item: any) => {
-    return {
-      value: item.totalAmmount / 1000,
-      labelComponent: () =>
-        customLabel(
-          new Intl.DateTimeFormat('en-GA', {
-            year: 'numeric',
-            month: 'short',
-          }).format(new Date(item.year, item.month)),
-        ),
-      customDataPoint: customDataPoint,
-    };
-  });
-};
 
-console.log(convertDataToChartData(DATA));
+const width = Dimensions.get('screen').width;
 
-const OwnAreaChart = ({
-  data,
-  month,
-  onChangeMonth = () => {},
-  loading,
-}: Props) => {
-  const sampleDate: any = [
-    {
-      value: 100,
-      labelComponent: () => customLabel('22 Nov'),
-      customDataPoint: customDataPoint,
-    },
-    {
-      value: 140,
-      hideDataPoint: true,
-    },
-    {
-      value: 250,
-      customDataPoint: customDataPoint,
-    },
-    {
-      value: 290,
-      hideDataPoint: true,
-    },
-    {
-      value: 410,
-      labelComponent: () => customLabel('24 Nov'),
-      customDataPoint: customDataPoint,
-    },
-    {
-      value: 440,
-      hideDataPoint: true,
-    },
-    {
-      value: 300,
-      customDataPoint: customDataPoint,
-    },
-    {
-      value: 280,
-      hideDataPoint: true,
-    },
-    {
-      value: 180,
-      labelComponent: () => customLabel('26 Nov'),
-      customDataPoint: customDataPoint,
-    },
-    {
-      value: 150,
-      hideDataPoint: true,
-    },
-    {
-      value: 150,
-      customDataPoint: customDataPoint,
-    },
-  ];
-  if (loading) return <LoadingOverlay />;
+type DataType = 'EXPENSE' | 'INCOME';
+interface Props {
+  title?: String;
+  type: DataType;
+  containerStyle?: ViewStyle;
+}
+
+const OwnAreaChart = ({title = '', type, containerStyle}: Props) => {
+  const {user} = useSelector((state: RootState) => state.user);
+
+  const [data, setData] = useState<any>([]);
+  const [counter, setCounter] = useState(4);
+  const [loading, setLoading] = useState(false);
+  // console.log(data);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const response = await getSpendingStatistic(
+          user.id,
+          user.token,
+          `num=${counter}`,
+        );
+        setData(response);
+      } catch (error) {
+        console.log(error);
+        Alert.alert('Something went wrong!', 'Try again later!');
+      }
+      setLoading(false);
+    })();
+  }, [counter]);
+
+  const convertDataToChartData = (data: Spending[]) => {
+    return data.map((item: Spending) => {
+      return {
+        value: type === 'INCOME' ? item.income / 1000 : item.expense / 1000,
+        label: 'test',
+        labelComponent: () =>
+          customLabel(
+            new Intl.DateTimeFormat('en-GA', {
+              year: '2-digit',
+              month: 'short',
+            }).format(new Date(item.year, item.month - 1)),
+          ),
+        customDataPoint: customDataPoint,
+      };
+    });
+  };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <HeaderOfChart
-        title="expense"
-        value={month}
-        onChangeValue={val => onChangeMonth(val)}
+        title={title}
+        value={counter}
+        onChangeValue={val => setCounter(val)}
       />
-      <LineChart
-        thickness={4}
-        color={Colors.dark}
-        // maxValue={600}
-        noOfSections={3}
-        areaChart
-        yAxisTextStyle={{color: Colors.dark}}
-        data={convertDataToChartData(DATA)}
-        curved
-        startFillColor={Colors.theme}
-        endFillColor={Colors.theme200}
-        startOpacity={0.4}
-        endOpacity={0.4}
-        spacing={80}
-        // backgroundColor="#414141"
-        rulesColor="gray"
-        rulesType="solid"
-        initialSpacing={10}
-        yAxisColor={Colors.dark}
-        xAxisColor={Colors.dark}
-        dataPointsHeight={20}
-        dataPointsWidth={20}
-        // pointerConfig={{
-        //   pointerStripUptoDataPoint: true,
-        //   pointerStripColor: Colors.dark,
-        //   pointerStripWidth: 2,
-        //   strokeDashArray: [2, 5],
-        //   pointerColor: 'lightgray',
-        //   radius: 4,
-        //   pointerLabelWidth: 100,
-        //   pointerLabelHeight: 120,
-        //   pointerLabelComponent: (items: any) => {
-        //     return (
-        //       <View style={styles.pointerLabel}>
-        //         <Text>{items[0].value}</Text>
-        //       </View>
-        //     );
-        //   },
-        // }}
-      />
+      <View style={{height: 250}}>
+        {loading ? (
+          <LoadingOverlay style={{backgroundColor: Colors.white}} />
+        ) : (
+          <LineChart
+            thickness={4}
+            color={Colors.dark}
+            maxValue={3000}
+            noOfSections={3}
+            areaChart
+            yAxisTextStyle={{color: Colors.dark}}
+            data={convertDataToChartData(data)}
+            curved
+            startFillColor={Colors.theme}
+            endFillColor={Colors.theme200}
+            startOpacity={0.4}
+            endOpacity={0.4}
+            spacing={data.length <= 4 ? width / data.length : 120}
+            // backgroundColor="#414141"
+            rulesColor="gray"
+            rulesType="solid"
+            initialSpacing={10}
+            yAxisColor={Colors.dark}
+            xAxisColor={Colors.dark}
+            dataPointsHeight={20}
+            dataPointsWidth={20}
+            // pointerConfig={{
+            //   pointerStripUptoDataPoint: true,
+            //   pointerStripColor: Colors.dark,
+            //   pointerStripWidth: 2,
+            //   strokeDashArray: [2, 5],
+            //   pointerColor: 'lightgray',
+            //   radius: 4,
+            //   pointerLabelWidth: 100,
+            //   pointerLabelHeight: 120,
+            //   pointerLabelComponent: (items: any) => {
+            //     return (
+            //       <View style={styles.pointerLabel}>
+            //         <Text>{items[0].value}</Text>
+            //       </View>
+            //     );
+            //   },
+            // }}
+          />
+        )}
+      </View>
+
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Expense in {month} lastest month</Text>
+        <Text style={styles.title}>Expense in {counter} lastest month</Text>
       </View>
     </View>
   );

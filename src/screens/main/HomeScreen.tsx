@@ -51,7 +51,6 @@ const HomeScreen = (): JSX.Element => {
   const [category, setCategory] = useState<any>('All');
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [queryString, setQueryString] = useState('');
 
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
@@ -65,11 +64,6 @@ const HomeScreen = (): JSX.Element => {
     (_event: any, newDate: Date) => {
       const selectedDate = newDate || date;
       showDatePicker(false);
-      setQueryString(
-        `month=${
-          selectedDate?.getMonth() + 1
-        }&year=${selectedDate?.getFullYear()}`,
-      );
       setDate(selectedDate);
     },
     [date, showPicker],
@@ -96,14 +90,18 @@ const HomeScreen = (): JSX.Element => {
     setLoading(true);
     try {
       if (category === 'All') {
-        const response = await getOwnExpenses(user.id, user.token, queryString);
+        const response = await getOwnExpenses(
+          user.id,
+          user.token,
+          `month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
+        );
         dispatch(setExpenses(response));
       } else {
         const response = await getExpensesByCategory(
           user.id,
           user.token,
           category,
-          queryString,
+          `month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
         );
         dispatch(setExpenses(response));
       }
@@ -115,13 +113,13 @@ const HomeScreen = (): JSX.Element => {
 
   useEffect(() => {
     loadData();
-  }, [category, date, queryString, index]);
+  }, [category, date, index]);
   if (refresh) return <LoadingOverlay />;
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <Header onPress={() => setShowPicker(true)} date={date} />
       <View style={{flex: 0.9}}>
-        <Statistics containerStyle={{flex: 0.45}} />
+        <Statistics time={date} containerStyle={{flex: 0.45}} />
         <List
           loading={loading}
           data={expenses}

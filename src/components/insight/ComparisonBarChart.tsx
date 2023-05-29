@@ -1,113 +1,71 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Alert, ViewStyle} from 'react-native';
 import {BarChart} from 'react-native-gifted-charts';
 
 import {Colors} from '../../configs/colors';
 import {Sizes} from '../../configs/sizes';
 import HeaderOfChart from './HeaderOfChart';
+import {Spending} from '../../interfaces/Spending';
+import {getSpendingStatistic} from '../../utils/functions/api/spending';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reducers/store';
+import LoadingOverlay from '../ui/LoadingOverlay';
 
-const INCOMES = [
-  {
-    month: 1,
-    year: 2023,
-    income: 2500000,
-  },
-  {
-    month: 2,
-    year: 2023,
-    income: 2500000,
-  },
-  {
-    month: 3,
-    year: 2023,
-    income: 2500000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    income: 2500000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    income: 2500000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    income: 2500000,
-  },
-];
-const EXPENSES = [
-  {
-    month: 1,
-    year: 2023,
-    expense: 2320000,
-  },
-  {
-    month: 2,
-    year: 2023,
-    expense: 2180000,
-  },
-  {
-    month: 3,
-    year: 2023,
-    expense: 1760000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    expense: 3200000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    expense: 1590000,
-  },
-  {
-    month: 4,
-    year: 2023,
-    expense: 2430000,
-  },
-];
-
-const convertIncomeDataToChartData = (data: any) =>
+const convertDataToChartData = (data: any) =>
   data.map((item: any) => {
-    return {
-      value: item.income / 1000,
-      label: new Intl.DateTimeFormat('en-GA', {
-        month: 'short',
-      }).format(new Date(item.year, item.month)),
-      spacing: 2,
-      labelWidth: 30,
-      labelTextStyle: {color: Colors.dark},
-      frontColor: Colors.theme,
-      barWidth: 25,
-    };
+    return [
+      {
+        value: item.income / 1000,
+        label: new Intl.DateTimeFormat('en-GA', {
+          month: 'short',
+          // year: '2-digit',
+        }).format(new Date(item.year, item.month - 1)),
+        spacing: 2,
+        labelWidth: 30,
+        labelTextStyle: {color: Colors.dark},
+        frontColor: Colors.theme,
+        barWidth: 30,
+      },
+      {value: item.expense / 1000, frontColor: Colors.red, barWidth: 25},
+    ];
   });
 
-const convertExpenseDataToChartData = (data: any) =>
-  data.map((item: any) => {
-    return {value: item.expense / 1000, frontColor: Colors.red, barWidth: 25};
-  });
+interface Props {
+  containerStyle?: ViewStyle;
+}
 
-const incomes = convertIncomeDataToChartData(INCOMES);
-const expenses = convertExpenseDataToChartData(EXPENSES);
+const ComparisionBarChart = ({containerStyle}: Props): JSX.Element => {
+  const {user} = useSelector((state: RootState) => state.user);
 
-const mergeIncomesAndExpenses = (incomes: any, expenses: any) => {
-  const result = [];
-  for (let i = 0; i < incomes.length; i++) {
-    result.push(incomes[i], expenses[i]);
-  }
-  return result;
-};
+  const [data, setData] = useState<Spending[]>([]);
+  const [counter, setCounter] = useState(3);
+  const [loading, setLoading] = useState(false);
 
-const ComparisionBarChart = (): JSX.Element => {
-  const [selectedValue, setSelectedValue] = useState(1);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const response = await getSpendingStatistic(
+          user.id,
+          user.token,
+          `&num=${counter}`,
+        );
+        setData(response);
+      } catch (error) {
+        console.log(error);
+        Alert.alert('Something went wrong!');
+      }
+      setLoading(false);
+    })();
+  }, [counter]);
 
   return (
-    <View style={styles.container}>
-      <HeaderOfChart title="my comparison" />
+    <View style={[styles.container, containerStyle]}>
+      <HeaderOfChart
+        title="my comparison"
+        value={counter}
+        onChangeValue={val => setCounter(val)}
+      />
       <View style={styles.titles}>
         <View style={styles.itemTitleContainer}>
           <View style={[styles.thumb, {backgroundColor: Colors.theme}]} />
@@ -118,17 +76,23 @@ const ComparisionBarChart = (): JSX.Element => {
           <Text style={styles.title}>Expense</Text>
         </View>
       </View>
-      <BarChart
-        data={mergeIncomesAndExpenses(incomes, expenses)}
-        barWidth={8}
-        spacing={24}
-        hideRules={true}
-        yAxisTextStyle={{color: Colors.dark, marginLeft: 8}}
-        xAxisColor={Colors.dark}
-        yAxisColor={Colors.dark}
-        noOfSections={3}
-        // maxValue={75}
-      />
+      <View style={{height: 250, width: '100%'}}>
+        {loading ? (
+          <LoadingOverlay style={{backgroundColor: Colors.white}} />
+        ) : (
+          <BarChart
+            data={convertDataToChartData(data).flat()}
+            barWidth={8}
+            spacing={24}
+            hideRules={true}
+            yAxisTextStyle={{color: Colors.dark, marginLeft: 8}}
+            xAxisColor={Colors.dark}
+            yAxisColor={Colors.dark}
+            noOfSections={3}
+            maxValue={3000}
+          />
+        )}
+      </View>
 
       <View style={styles.name}>
         <Text style={styles.title}>Income and Expense in 5 latest month</Text>
@@ -154,6 +118,7 @@ const styles = StyleSheet.create({
   },
   itemTitleContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     color: Colors.dark,
@@ -163,6 +128,7 @@ const styles = StyleSheet.create({
   thumb: {
     width: 16,
     height: 16,
+    marginRight: 8,
     borderRadius: 8,
   },
   name: {

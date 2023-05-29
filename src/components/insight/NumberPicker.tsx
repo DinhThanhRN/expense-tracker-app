@@ -20,9 +20,10 @@ const NumberPicker = ({
       <Picker
         selectedValue={value}
         onValueChange={(itemValue, itemIndex) => onChange(itemValue)}>
-        <Picker.Item label="3 latest month" value={1} />
-        <Picker.Item label="4 latest month" value={2} />
-        <Picker.Item label="6 latest month" value={3} />
+        <Picker.Item label="3 latest month" value={3} />
+        <Picker.Item label="4 latest month" value={4} />
+        <Picker.Item label="5 latest month" value={5} />
+        <Picker.Item label="6 latest month" value={6} />
       </Picker>
     </View>
   );

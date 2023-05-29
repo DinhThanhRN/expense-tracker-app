@@ -1,9 +1,9 @@
 interface Spending {
-  _id: String;
-  expense: Number;
-  income: Number;
-  month: Number;
-  year: Number;
+  _id: string;
+  expense: number;
+  income: number;
+  month: number;
+  year: number;
 }
 
-export default Spending;
+export type {Spending};

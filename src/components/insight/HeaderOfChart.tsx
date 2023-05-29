@@ -19,7 +19,7 @@ const HeaderOfChart = ({
       <Text style={styles.greeting}>{title.toUpperCase()}</Text>
       <NumberPicker
         value={value}
-        style={{position: 'absolute', right: 8, top: 8}}
+        style={styles.picker}
         onChange={val => onChangeValue(val)}
       />
     </View>
@@ -39,5 +39,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.dark,
+  },
+  picker: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
   },
 });

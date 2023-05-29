@@ -13,6 +13,8 @@ import Expense from '../../interfaces/Expense';
 import {getOwnExpenses} from '../../utils/functions/api/expense';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../reducers/store';
+import {getSpendingStatistic} from '../../utils/functions/api/spending';
+import {Spending} from '../../interfaces/Spending';
 
 const InsightsScreen = (): JSX.Element => {
   const {user} = useSelector((state: RootState) => state.user);
@@ -43,37 +45,22 @@ const InsightsScreen = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
 
   // Get expenses by month from server
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [monthOfExpenses, setMonthOfExpenses] = useState(0);
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const response = await getOwnExpenses(
-          user.id,
-          user.token,
-          monthOfExpenses !== 0 ? `month=${monthOfExpenses}` : '',
-        );
-        setExpenses(response);
-      } catch (error) {
-        console.log(error);
-        Alert.alert('Something went wrong!', 'Try again later!');
-      }
-      setLoading(false);
-    })();
-  }, [monthOfExpenses]);
-  console.log(expenses);
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.text}>STATISTIC</Text>
       </View>
-      <ComparisionBarChart />
+      <ComparisionBarChart containerStyle={{flex: 0.3}} />
       <OwnAreaChart
-        month={monthOfExpenses}
-        onChangeMonth={month => setMonthOfExpenses(month)}
-        loading={loading}
+        title="my income"
+        type="INCOME"
+        containerStyle={{flex: 0.3}}
+      />
+      <OwnAreaChart
+        title="my expense"
+        type="EXPENSE"
+        containerStyle={{flex: 0.3}}
       />
     </ScrollView>
   );
@@ -88,6 +75,7 @@ const styles = StyleSheet.create({
     // padding: Sizes.globalPadding + 8,
   },
   headerContainer: {
+    flex: 0.1,
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',

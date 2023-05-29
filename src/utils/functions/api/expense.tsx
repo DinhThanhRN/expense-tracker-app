@@ -35,9 +35,13 @@ export const getExpensesByCategory = async (
   return response.data.expense;
 };
 
-export const statisticExpense = async (userID: String, token: String) => {
+export const statisticExpense = async (
+  userID: String,
+  token: String,
+  query: string = '',
+) => {
   const {data: response} = await axios.get(
-    `${BACKEND_URL}/expenses/stastitic/${userID}/`,
+    `${BACKEND_URL}/expenses/stastitic/${userID}?${query}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
