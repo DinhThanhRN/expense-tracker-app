@@ -25,7 +25,7 @@ export const getExpensesByCategory = async (
   queryString: String = '',
 ) => {
   const {data: response} = await axios.get(
-    `${BACKEND_URL}/expenses/${userID}?category=${category}&${queryString}`,
+    `${BACKEND_URL}/expenses/expense/${userID}?category=${category}&${queryString}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export const createNewExpense = async (
 };
 export const editExpense = async (id: String, token: String, data: Expense) => {
   const {data: response} = await axios.patch(
-    `${BACKEND_URL}/expenses/${id}`,
+    `${BACKEND_URL}/expenses/expense/${id}`,
     data,
     {
       headers: {
@@ -82,7 +82,7 @@ export const editExpense = async (id: String, token: String, data: Expense) => {
   return response.data.expense;
 };
 export const deleteExpense = async (id: String, token: String) => {
-  await axios.delete(`${BACKEND_URL}/expenses/${id}`, {
+  await axios.delete(`${BACKEND_URL}/expenses/expense/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
