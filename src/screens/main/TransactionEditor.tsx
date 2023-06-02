@@ -124,6 +124,7 @@ const TransactionEditor = (): JSX.Element => {
         }
         navigation.goBack();
       } catch (error) {
+        console.log(error);
         createPlainAlert('Can not create new transaction!', 'Try again');
       }
       setLoading(false);

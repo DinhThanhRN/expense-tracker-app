@@ -67,7 +67,7 @@ const NotificationBox = ({data}: Props): JSX.Element => {
           </View>
 
           <PressableText
-            textStyle={[styles.markText, deleted && {color: Colors.dark}]}
+            textStyle={[styles.markText, deleted && {color: Colors.white}]}
             onPress={() => setMark(false)}>
             Mark as read
           </PressableText>
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 18,
+    color: Colors.dark,
   },
   inforContainer: {
     flex: 0.2,
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
   },
   time: {
     marginLeft: 8,
+    color: Colors.dark,
   },
   markText: {
     color: Colors.theme300,

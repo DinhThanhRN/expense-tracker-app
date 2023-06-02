@@ -115,7 +115,7 @@ const OwnAreaChart = ({title = '', type, containerStyle}: Props) => {
           <LineChart
             thickness={4}
             color={Colors.dark}
-            maxValue={3000}
+            // maxValue={3000}
             noOfSections={3}
             areaChart
             yAxisTextStyle={{color: Colors.dark}}
