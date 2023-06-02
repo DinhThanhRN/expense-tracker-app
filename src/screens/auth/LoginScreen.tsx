@@ -20,7 +20,7 @@ import {NavigationProps} from '../../types/NavigationProps';
 import {createPlainAlert} from '../../components/error/createPlainAlert';
 import {login} from '../../services/auth';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
-import {storeAuthData} from '../../utils/functions/authInLocal';
+import {storeAuthData} from '../../services/auth';
 import {setUser} from '../../reducers/user';
 import {AppDispatch, RootState} from '../../reducers/store';
 import HomeScreen from '../main/HomeScreen';

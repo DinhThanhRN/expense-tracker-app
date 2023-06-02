@@ -7,7 +7,7 @@ import HomeScreen from './HomeScreen';
 import InsightsScreen from './InsightsScreen';
 import AccountScreen from './AccountScreen';
 import {Colors} from '../../configs/colors';
-import GoalScreen from './GoalScreen';
+import NotificationScreen from './NotificationScreen';
 import {Sizes} from '../../configs/sizes';
 
 const BottomTab = createBottomTabNavigator();
@@ -58,17 +58,17 @@ const MaiScreen = (): JSX.Element => {
         }}
       />
       <BottomTab.Screen
-        name="GoalScreen"
-        component={GoalScreen}
+        name="NotificationScreen"
+        component={NotificationScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="target"
+              name="alarm"
               color={focused ? Colors.theme : Colors.white}
               size={Sizes.icon}
             />
           ),
-          tabBarLabel: 'Goal',
+          tabBarLabel: 'Notification',
         }}
       />
       <BottomTab.Screen

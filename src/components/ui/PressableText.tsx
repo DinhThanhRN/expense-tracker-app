@@ -7,7 +7,7 @@ interface Props {
   children: String;
   onPress?: () => void;
   style?: ViewStyle;
-  textStyle?: TextStyle;
+  textStyle?: any;
 }
 
 const PressableText = ({

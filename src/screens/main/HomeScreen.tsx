@@ -6,9 +6,10 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-import {View, StyleSheet, PanResponder} from 'react-native';
+import {View, StyleSheet, PanResponder, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MonthPicker from 'react-native-month-year-picker';
+import messaging from '@react-native-firebase/messaging';
 
 import {BottomTabProps} from '../../types/NavigationProps';
 import {Colors} from '../../configs/colors';
@@ -22,15 +23,40 @@ import {
   getExpensesByCategory,
 } from '../../utils/functions/api/expense';
 import Header from '../../components/home/Header';
-import {UserState} from '../../reducers/user';
+import {UserState, removeUser} from '../../reducers/user';
 import {setExpenses} from '../../reducers/expense';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import {Sizes} from '../../configs/sizes';
 
 const HomeScreen = (): JSX.Element => {
+  const {user}: UserState = useSelector((state: RootState) => state.user);
+  const {expenses} = useSelector((state: RootState) => state.expense);
+  const dispatch = useDispatch<AppDispatch>();
+
   const navigation = useNavigation<BottomTabProps>();
   const index = useNavigationState(state => state.index);
 
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from the background',
+        remoteMessage.data,
+        remoteMessage.notification,
+      );
+      navigation.navigate('NotificationScreen');
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage)
+          console.log(
+            'Notification caused app to open from quit state: ',
+            remoteMessage.notification,
+          );
+      });
+  }, []);
   useLayoutEffect(() => {
     navigation.setOptions({
       tabBarIcon: ({focused}) => (
@@ -43,10 +69,6 @@ const HomeScreen = (): JSX.Element => {
       tabBarLabel: 'Home',
     });
   }, []);
-
-  const {user}: UserState = useSelector((state: RootState) => state.user);
-  const {expenses} = useSelector((state: RootState) => state.expense);
-  const dispatch = useDispatch<AppDispatch>();
 
   const [category, setCategory] = useState<any>('All');
   const [loading, setLoading] = useState(false);

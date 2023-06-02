@@ -1,5 +1,6 @@
 src/utils/backend_url.tsx
 src/InitComponent.tsx
+expense-tracker-key-store.jks
 # OSX
 #
 .DS_Store

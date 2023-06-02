@@ -26,10 +26,12 @@ const getFCMToken = async () => {
 };
 
 const NotificationListener = () => {
+  //   const {user} = useSelector((state: RootState) => state.user);
+
   messaging().onNotificationOpenedApp(remoteMessage => {
     console.log(
       'Notification caused app to open from the background state',
-      remoteMessage.notification,
+      remoteMessage.data,
     );
   });
 
@@ -48,6 +50,7 @@ const NotificationListener = () => {
   messaging().onMessage(async remoteMessage => {
     console.log('Notification from foreground state ...', remoteMessage);
   });
+  //   return <></>;
 };
 
 export {requestUserPermision, getFCMToken, NotificationListener};

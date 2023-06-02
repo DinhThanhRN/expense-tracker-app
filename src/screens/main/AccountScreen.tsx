@@ -27,6 +27,7 @@ import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import PressableText from '../../components/ui/PressableText';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {uploadImageToCloudinary} from '../../services/upload/uploadImageToCloudinary';
+import {logout} from '../../services/auth';
 
 interface AllowedChangingState {
   name: boolean;
@@ -146,8 +147,11 @@ const AccountScreen = (): JSX.Element => {
     }
   };
 
-  const logout = () => {
+  const logoutAccount = async () => {
+    setLoading(true);
+    await logout(user.id);
     dispatch(removeUser());
+    setLoading(false);
   };
 
   if (loading) return <LoadingOverlay />;
@@ -163,7 +167,7 @@ const AccountScreen = (): JSX.Element => {
           color={'red'}
           style={{top: 0, right: 0, position: 'absolute', zIndex: 1}}
           size={40}
-          onPress={logout}
+          onPress={logoutAccount}
         />
         <View style={styles.avatarContainer}>
           {user.avatar ? (

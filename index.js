@@ -11,3 +11,6 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerHeadlessTask('listen', () => {
+  require('./src/services/inbackground/listen');
+});
